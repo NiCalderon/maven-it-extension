@@ -89,6 +89,13 @@ class MavenITExtension implements BeforeEachCallback, ParameterResolver, BeforeT
     mavenItTestCaseBaseDirectory.mkdirs();
 
     new StorageHelper(context).save(targetTestClassesDirectory, mavenItTestCaseBaseDirectory, DirectoryHelper.getTargetDir());
+    Method methodName = context.getTestMethod().orElseThrow(() -> new IllegalStateException("No method given"));
+
+    StorageHelper storageHelper = new StorageHelper(context);
+    storageHelper.save(mavenItBaseDirectory, mavenItTestCaseBaseDirectory, DirectoryHelper.getTargetDir());
+    File testBaseDir = new File(mavenItTestCaseBaseDirectory, methodName.getName());
+    MavenProjectResult mavenProjectResult = new MavenProjectResult(testBaseDir, new Model());// FIXME: Model should be done right.
+    storageHelper.put(ParameterType.ProjectResult + context.getUniqueId(), mavenProjectResult);
   }
 
   @Override
