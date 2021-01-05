@@ -50,7 +50,7 @@ class ITWithBeforeEachMavenIT {
     File testMethodProjectFolder = new File(this.getClass().getResource("/").getFile(), "com/soebes/itf/examples/ITWithBeforeEachMavenIT/the_first_test_case");
     List<String> expectedElements = createElements(testMethodProjectFolder);
 
-    List<String> actualElements = createElements(project.getProjectDir()); //HINT: "project" hard coded?
+    List<String> actualElements = createElements(project.getProjectDir());
 
     assertThat(actualElements).containsExactlyInAnyOrderElementsOf(expectedElements);
 
