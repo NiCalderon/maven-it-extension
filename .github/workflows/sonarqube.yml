@@ -31,11 +31,12 @@ jobs:
     container: "maven:3.6.3-jdk-11-slim"
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/cache@v2
+      - name: Cache
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-sonar-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-sonar
+          restore-keys: ${{ runner.os }}-maven-
       - name: 'Analyze'
         run: mvn -V --no-transfer-progress clean install sonar:sonar --fail-never
         env:

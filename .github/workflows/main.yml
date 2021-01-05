@@ -31,11 +31,12 @@ jobs:
     container: "maven:3.6.3-jdk-8-slim"
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - name: Cache
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-ubuntu-latest-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-ubuntu-latest
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
       - name: 'Build'
         run: mvn -V --no-transfer-progress clean verify --fail-at-end
   windows:
@@ -43,11 +44,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - name: Cache
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-windows-latest-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-windows-latest
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
       - name: 'Set up JDK 8'
         uses: actions/setup-java@v1
         with:
@@ -60,11 +62,12 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - name: Cache
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-macos-latest-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-macos-latest
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
       - name: 'Set up JDK 8'
         uses: actions/setup-java@v1
         with:
