@@ -45,12 +45,12 @@ class ITWithBeforeEachMavenIT {
   void beforeEach(MavenProjectResult project) throws IOException {
     //Each time the beforeEach will be executed the extension will delete the project and
     //recreate from scratch. This will be checked in the following statement.
-    assertThat(new File(project.getBaseDir(), "project/target")).doesNotExist();
+    assertThat(new File(project.getProjectDir(), "target")).doesNotExist();
 
     File testMethodProjectFolder = new File(this.getClass().getResource("/").getFile(), "com/soebes/itf/examples/ITWithBeforeEachMavenIT/the_first_test_case");
     List<String> expectedElements = createElements(testMethodProjectFolder);
 
-    List<String> actualElements = createElements(new File(project.getBaseDir(), "project")); //HINT: "project" hard coded?
+    List<String> actualElements = createElements(project.getProjectDir()); //HINT: "project" hard coded?
 
     assertThat(actualElements).containsExactlyInAnyOrderElementsOf(expectedElements);
 

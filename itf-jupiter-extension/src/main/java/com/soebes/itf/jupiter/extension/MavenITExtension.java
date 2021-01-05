@@ -102,6 +102,10 @@ class MavenITExtension implements BeforeEachCallback, ParameterResolver, BeforeT
 
     DirectoryResolverResult directoryResolverResult = new DirectoryResolverResult(context);
     File integrationTestCaseDirectory = directoryResolverResult.getIntegrationTestCaseDirectory();
+
+    MavenProjectResult mavenProjectResult = new MavenProjectResult(testBaseDir, directoryResolverResult.getProjectDirectory(), directoryResolverResult.getIntegrationTestCaseDirectory(), new Model());// FIXME: Model should be done right.
+    storageHelper.put(ParameterType.ProjectResult + context.getUniqueId(), mavenProjectResult);
+
     integrationTestCaseDirectory.mkdirs();
 
     //TODO: Reconsider deleting the local cache .m2/repository with each run yes/no
@@ -169,32 +173,6 @@ class MavenITExtension implements BeforeEachCallback, ParameterResolver, BeforeT
   @Override
   public void beforeTestExecution(ExtensionContext context)
       throws IOException, InterruptedException, XmlPullParserException {
-
-//
-//    DirectoryResolverResult directoryResolverResult = new DirectoryResolverResult(context);
-//    File integrationTestCaseDirectory = directoryResolverResult.getIntegrationTestCaseDirectory();
-//    integrationTestCaseDirectory.mkdirs();
-//
-//    if (mavenProject.isPresent()) {
-//      if (!directoryResolverResult.getProjectDirectory().exists()) {
-//        directoryResolverResult.getProjectDirectory().mkdirs();
-//        directoryResolverResult.getCacheDirectory().mkdirs();
-//
-//        FileUtils.copyDirectory(directoryResolverResult.getSourceMavenProject(),
-//            directoryResolverResult.getProjectDirectory());
-//        FileUtils.copyDirectory(directoryResolverResult.getComponentUnderTestDirectory(),
-//            directoryResolverResult.getCacheDirectory());
-//      }
-//    } else {
-//      FileUtils.deleteQuietly(directoryResolverResult.getProjectDirectory());
-//      directoryResolverResult.getProjectDirectory().mkdirs();
-//      directoryResolverResult.getCacheDirectory().mkdirs();
-//
-//      FileUtils.copyDirectory(directoryResolverResult.getSourceMavenProject(),
-//          directoryResolverResult.getProjectDirectory());
-//      FileUtils.copyDirectory(directoryResolverResult.getComponentUnderTestDirectory(),
-//          directoryResolverResult.getCacheDirectory());
-//    }
 
     Method methodName = context.getTestMethod().orElseThrow(() -> new IllegalStateException("No method given"));
 
