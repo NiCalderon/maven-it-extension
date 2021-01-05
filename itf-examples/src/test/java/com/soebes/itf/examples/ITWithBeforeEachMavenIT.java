@@ -59,6 +59,6 @@ class ITWithBeforeEachMavenIT {
 
   @MavenTest
   void the_first_test_case(MavenExecutionResult result) {
-    System.out.println("result = " + result);
+    MavenITAssertions.assertThat(result).isSuccessful();
   }
 }
