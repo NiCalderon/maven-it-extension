@@ -104,6 +104,9 @@ class MavenITExtension implements BeforeEachCallback, ParameterResolver, BeforeT
     File integrationTestCaseDirectory = directoryResolverResult.getIntegrationTestCaseDirectory();
     integrationTestCaseDirectory.mkdirs();
 
+    //TODO: Reconsider deleting the local cache .m2/repository with each run yes/no
+    // Define default behaviour => Remove it.
+    // Make it configurable. How? Think about?
     if (mavenProject.isPresent()) {
       if (!directoryResolverResult.getProjectDirectory().exists()) {
         directoryResolverResult.getProjectDirectory().mkdirs();

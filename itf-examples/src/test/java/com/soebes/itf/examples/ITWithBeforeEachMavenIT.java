@@ -26,9 +26,11 @@ import com.soebes.itf.jupiter.maven.MavenExecutionResult;
 import com.soebes.itf.jupiter.maven.MavenProjectResult;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,18 +42,23 @@ class ITWithBeforeEachMavenIT {
   @BeforeEach
   //TODO: Inject also a directory which contains `project` ? (MavenProjectResult)
   //TODO: testMethodProjectFolder should be made part of MavenProjectResult as well! => simplifies the following code
-  void beforeEach(MavenProjectResult project) {
+  void beforeEach(MavenProjectResult project) throws IOException {
     File testMethodProjectFolder = new File(this.getClass().getResource("/").getFile(), "com/soebes/itf/examples/ITWithBeforeEachMavenIT/the_first_test_case");
     List<String> expectedElements = createElements(testMethodProjectFolder);
 
     List<String> actualElements = createElements(new File(project.getBaseDir(), "project")); //HINT: "project" hard coded?
 
     MavenITAssertions.assertThat(actualElements).containsExactlyInAnyOrderElementsOf(expectedElements);
+
+    File file = new File(project.getBaseDir(), "project/test");
+    Assertions.assertThat(file).doesNotExist();
+
+    file.createNewFile();
+
   }
 
   private List<String> createElements(File xdirectory) {
     Collection<File> expectedCollectedFiles = FileUtils.listFilesAndDirs(xdirectory, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-    expectedCollectedFiles.forEach(System.out::println);
 
     List<String> expectedElements = expectedCollectedFiles.stream().map(p -> p.toString().replace(xdirectory.getAbsolutePath(), "")).collect(toList());
     return expectedElements;
@@ -59,6 +66,11 @@ class ITWithBeforeEachMavenIT {
 
   @MavenTest
   void the_first_test_case(MavenExecutionResult result) {
+    MavenITAssertions.assertThat(result).isSuccessful();
+  }
+
+  @MavenTest
+  void the_second_test_case(MavenExecutionResult result) {
     MavenITAssertions.assertThat(result).isSuccessful();
   }
 }
