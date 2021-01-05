@@ -43,6 +43,10 @@ class ITWithBeforeEachMavenIT {
   //TODO: Enhanced MavenProjectResult with `target`
   //TODO: testMethodProjectFolder should be made part of MavenProjectResult as well! => simplifies the following code
   void beforeEach(MavenProjectResult project) throws IOException {
+    //Each time the beforeEach will be executed the extension will delete the project and
+    //recreate from scratch. This will be checked in the following statement.
+    assertThat(new File(project.getBaseDir(), "project/target")).doesNotExist();
+
     File testMethodProjectFolder = new File(this.getClass().getResource("/").getFile(), "com/soebes/itf/examples/ITWithBeforeEachMavenIT/the_first_test_case");
     List<String> expectedElements = createElements(testMethodProjectFolder);
 
