@@ -39,7 +39,6 @@ import static java.util.stream.Collectors.toList;
 class ITWithBeforeEachMavenIT {
 
   @BeforeEach
-  //TODO: Inject also a directory which contains `project` ? (MavenProjectResult)
   //TODO: Enhanced MavenProjectResult with `target`
   //TODO: testMethodProjectFolder should be made part of MavenProjectResult as well! => simplifies the following code
   void beforeEach(MavenProjectResult project) throws IOException {
