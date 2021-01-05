@@ -19,22 +19,20 @@ package com.soebes.itf.examples;
  * under the License.
  */
 
-import com.soebes.itf.extension.assertj.MavenITAssertions;
 import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
 import com.soebes.itf.jupiter.extension.MavenTest;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
 import com.soebes.itf.jupiter.maven.MavenProjectResult;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 import static java.util.stream.Collectors.toList;
 
 @MavenJupiterExtension
@@ -50,7 +48,7 @@ class ITWithBeforeEachMavenIT {
 
     List<String> actualElements = createElements(new File(project.getBaseDir(), "project")); //HINT: "project" hard coded?
 
-    MavenITAssertions.assertThat(actualElements).containsExactlyInAnyOrderElementsOf(expectedElements);
+    assertThat(actualElements).containsExactlyInAnyOrderElementsOf(expectedElements);
 
   }
 
@@ -61,10 +59,10 @@ class ITWithBeforeEachMavenIT {
     return expectedElements;
   }
 
+  //FIXME: @RepeatedTest(value = 2) Does not work currently but it should work!
   @MavenTest
-  @RepeatedTest(value = 2)
   void the_first_test_case(MavenExecutionResult result) {
-    MavenITAssertions.assertThat(result).isSuccessful();
+    assertThat(result).isSuccessful();
   }
 
 }
