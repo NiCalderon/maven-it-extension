@@ -75,7 +75,7 @@ class MavenITExtension implements BeforeEachCallback, ParameterResolver, BeforeT
   private static final List<String> DEFAULT_COMMAND_LINE_OPTIONS = Arrays.asList(MavenCLIOptions.BATCH_MODE, MavenCLIOptions.SHOW_VERSION, MavenCLIOptions.ERRORS);
 
   @Override
-  public void beforeEach(ExtensionContext context) {
+  public void beforeEach(ExtensionContext context) throws IOException {
     Class<?> testClass = context.getTestClass()
         .orElseThrow(() -> new ExtensionConfigurationException("MavenITExtension is only supported for classes."));
 
@@ -92,18 +92,15 @@ class MavenITExtension implements BeforeEachCallback, ParameterResolver, BeforeT
     Method methodName = context.getTestMethod().orElseThrow(() -> new IllegalStateException("No method given"));
 
     StorageHelper storageHelper = new StorageHelper(context);
-    storageHelper.save(mavenItBaseDirectory, mavenItTestCaseBaseDirectory, DirectoryHelper.getTargetDir());
-    File testBaseDir = new File(mavenItTestCaseBaseDirectory, methodName.getName());
-    MavenProjectResult mavenProjectResult = new MavenProjectResult(testBaseDir, new Model());// FIXME: Model should be done right.
-    storageHelper.put(ParameterType.ProjectResult + context.getUniqueId(), mavenProjectResult);
-
+    storageHelper.save(mavenItTestCaseBaseDirectory, mavenItTestCaseBaseDirectory, DirectoryHelper.getTargetDir());
 
     Optional<Class<?>> mavenProject = AnnotationHelper.findMavenProjectAnnotation(context);
 
     DirectoryResolverResult directoryResolverResult = new DirectoryResolverResult(context);
     File integrationTestCaseDirectory = directoryResolverResult.getIntegrationTestCaseDirectory();
 
-    MavenProjectResult mavenProjectResult = new MavenProjectResult(testBaseDir, directoryResolverResult.getProjectDirectory(), directoryResolverResult.getIntegrationTestCaseDirectory(), new Model());// FIXME: Model should be done right.
+    // FIXME: Model should be done right.
+    MavenProjectResult mavenProjectResult = new MavenProjectResult(directoryResolverResult.getTargetDirectory(), directoryResolverResult.getProjectDirectory(), directoryResolverResult.getIntegrationTestCaseDirectory(), new Model());
     storageHelper.put(ParameterType.ProjectResult + context.getUniqueId(), mavenProjectResult);
 
     integrationTestCaseDirectory.mkdirs();
@@ -118,7 +115,7 @@ class MavenITExtension implements BeforeEachCallback, ParameterResolver, BeforeT
 
         FileUtils.copyDirectory(directoryResolverResult.getSourceMavenProject(),
             directoryResolverResult.getProjectDirectory());
-        FileUtils.copyDirectory(directoryResolverResult.getComponentUnderTestDirectory(),
+        FileUtils.copyDirectory(directoryResolverResult.getTargetItfRepoDirectory(),
             directoryResolverResult.getCacheDirectory());
       }
     } else {
@@ -128,7 +125,7 @@ class MavenITExtension implements BeforeEachCallback, ParameterResolver, BeforeT
 
       FileUtils.copyDirectory(directoryResolverResult.getSourceMavenProject(),
           directoryResolverResult.getProjectDirectory());
-      FileUtils.copyDirectory(directoryResolverResult.getComponentUnderTestDirectory(),
+      FileUtils.copyDirectory(directoryResolverResult.getTargetItfRepoDirectory(),
           directoryResolverResult.getCacheDirectory());
     }
 
