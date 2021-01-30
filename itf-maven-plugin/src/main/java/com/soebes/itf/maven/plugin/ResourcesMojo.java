@@ -71,7 +71,6 @@ public class ResourcesMojo extends AbstractMojo {
    * The list of additional filter properties files to be used along with System and project properties, which would
    * be used for the filtering.
    *
-   * @see ResourcesMojo#filters
    */
   @Parameter(defaultValue = "${project.build.filters}", readonly = true)
   private List<String> buildFilters;
@@ -223,11 +222,7 @@ public class ResourcesMojo extends AbstractMojo {
     resource.setIncludes(includes);
 
     //TODO: Document the default excludes we are using?
-    ArrayList<String> excludes = new ArrayList<>();
-    excludes.add("**/.git/**");
-    excludes.add("**/.svn/**");
-    excludes.add("**/.bzr/**");
-    resource.setExcludes(excludes);
+    resource.setExcludes(Collections.emptyList());
 
     //TODO: Need to clean up.
     this.resources = new ArrayList<>();
