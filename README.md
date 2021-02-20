@@ -64,10 +64,10 @@ Of course there is a lot of convenience integrated into it to make integration t
 # Quick Start
 
 ## The General Requirements
-The requirements to write integration tests with the integration testing framework are the folloing:
+The requirements to write integration tests with the integration testing framework are the following:
 
-* JDK8+
-* Apache Maven 3.1.0 or above.
+* JDK11+
+* Apache Maven 3.1.0 or above. (I recommend to use Maven 3.6.3)
 
 ## The Maven Configuration
 
